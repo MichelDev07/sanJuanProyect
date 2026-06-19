@@ -151,7 +151,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
 
   try {
     await ensureSupabaseReady();
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
     if (error) throw error;
     await onAuthenticated(data.user);
   } catch (err) {
@@ -173,7 +173,7 @@ function traducirErrorAuth(msg = "") {
 // --- Logout ---
 document.getElementById("logout-btn").addEventListener("click", async () => {
   await ensureSupabaseReady();
-  await supabase.auth.signOut();
+  await window.supabaseClient.auth.signOut();
   currentUser = null;
   appEl.classList.add("is-hidden");
   authScreen.classList.remove("is-hidden");
@@ -185,7 +185,7 @@ async function onAuthenticated(user) {
   let fullName = user.user_metadata?.full_name || user.email;
 
   try {
-    const { data: profile } = await supabase
+    const { data: profile } = await window.supabaseClient
       .from("profiles")
       .select("full_name")
       .eq("id", user.id)
@@ -213,7 +213,7 @@ async function onAuthenticated(user) {
 // --- Sesión existente al cargar la página ---
 async function initAuthState() {
   await ensureSupabaseReady();
-  const { data } = await supabase.auth.getSession();
+  const { data } = await window.supabaseClient.auth.getSession();
   if (data.session?.user) {
     await onAuthenticated(data.session.user);
   }
@@ -264,7 +264,7 @@ async function cargarTodo() {
 }
 
 async function cargarProductos() {
-  const { data, error } = await supabase.from("productos").select("*").order("nombre");
+  const { data, error } = await window.supabaseClient.from("productos").select("*").order("nombre");
   if (error) {
     showToast("No se pudieron cargar los productos.", "error");
     return;
@@ -274,7 +274,7 @@ async function cargarProductos() {
 }
 
 async function cargarGastos() {
-  const { data, error } = await supabase
+  const { data, error } = await window.supabaseClient
     .from("gastos")
     .select("*")
     .order("fecha", { ascending: false })
@@ -287,7 +287,7 @@ async function cargarGastos() {
 }
 
 async function cargarVentas() {
-  const { data, error } = await supabase
+  const { data, error } = await window.supabaseClient
     .from("ventas")
     .select("*")
     .order("fecha", { ascending: false })
@@ -416,14 +416,14 @@ gastoForm.addEventListener("submit", async (e) => {
 
   try {
     if (id) {
-      const { error } = await supabase
+      const { error } = await window.supabaseClient
         .from("gastos")
         .update({ concepto, monto, fecha })
         .eq("id", id);
       if (error) throw error;
       showToast("Gasto actualizado correctamente.", "ok");
     } else {
-      const { error } = await supabase.from("gastos").insert({
+      const { error } = await window.supabaseClient.from("gastos").insert({
         concepto,
         monto,
         fecha,
@@ -554,7 +554,7 @@ ventaForm.addEventListener("submit", async (e) => {
   btn.disabled = true;
 
   try {
-    const { error } = await supabase.from("ventas").insert({
+    const { error } = await window.supabaseClient.from("ventas").insert({
       producto_id: productoId,
       producto_nombre: productoNombre,
       cantidad,
@@ -681,7 +681,7 @@ ventaEditForm.addEventListener("submit", async (e) => {
   btn.disabled = true;
 
   try {
-    const { error } = await supabase
+    const { error } = await window.supabaseClient
       .from("ventas")
       .update({
         producto_id: producto.id,
@@ -738,7 +738,7 @@ document.getElementById("confirm-accept").addEventListener("click", async () => 
 
   try {
     const tabla = tipo === "gasto" ? "gastos" : "ventas";
-    const { error } = await supabase.from(tabla).delete().eq("id", id);
+    const { error } = await window.supabaseClient.from(tabla).delete().eq("id", id);
     if (error) throw error;
 
     showToast(`${tipo === "gasto" ? "Gasto" : "Venta"} eliminado correctamente.`, "ok");
