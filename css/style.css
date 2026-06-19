@@ -225,8 +225,9 @@ input:focus-visible, select:focus-visible, button:focus-visible, .nav-item:focus
    APP SHELL
    ============================================================ */
 .app{
-  display:flex;
+  display: flex;
   min-height: 100vh;
+  /* En desktop: sidebar + main lado a lado */
 }
 
 .sidebar{
@@ -329,9 +330,10 @@ input:focus-visible, select:focus-visible, button:focus-visible, .nav-item:focus
 .user-avatar-sm{ width:30px; height:30px; font-size:12px; }
 
 .main{
-  flex:1;
+  flex: 1;
   padding: 32px 40px 60px;
-  min-width:0;
+  min-width: 0;
+  width: 0; /* evita que en flex se encoja mal */
 }
 
 /* ============================================================
@@ -596,40 +598,246 @@ input:focus-visible, select:focus-visible, button:focus-visible, .nav-item:focus
 .toast.is-ok{ background: var(--verde-ok); }
 
 /* ============================================================
-   RESPONSIVE
+   SIDEBAR OVERLAY (móvil — se activa vía JS añadiendo .is-open al sidebar)
+   ============================================================ */
+.sidebar-overlay{
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26,23,22,.55);
+  z-index: 49;
+  backdrop-filter: blur(1px);
+}
+.sidebar-overlay.is-visible{ display: block; }
+
+/* ============================================================
+   RESPONSIVE — 1080px: tablet landscape / desktop pequeño
    ============================================================ */
 @media (max-width: 1080px){
+  .main{ padding: 28px 28px 60px; }
   .kpi-grid{ grid-template-columns: repeat(2, 1fr); }
   .kpi-grid-3{ grid-template-columns: repeat(3, 1fr); }
   .panel-grid{ grid-template-columns: 1fr; }
-  .venta-form{ grid-template-columns: 1fr 1fr; }
+  .venta-form{
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+  .venta-submit{
+    grid-column: 1 / -1;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — 860px: tablet portrait / móvil grande
+   ============================================================ */
+@media (max-width: 860px){
+  /* App pasa a layout vertical: topbar arriba, main abajo */
+  .app{
+    flex-direction: column;
+  }
+
+  /* Sidebar fuera del flujo completamente */
+  .sidebar{
+    position: fixed;
+    left: 0; top: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    z-index: 50;
+    transition: transform .28s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 0 40px rgba(0,0,0,.4);
+    width: min(280px, 85vw);
+  }
+  .sidebar.is-open{ transform: translateX(0); }
+
+  /* Topbar visible */
+  .topbar{ display: flex; }
+
+  /* Main ocupa todo el ancho */
+  .main{
+    width: 100%;
+    padding: 22px 20px 60px;
+  }
+
+  /* KPI */
+  .kpi-grid, .kpi-grid-3{ grid-template-columns: 1fr 1fr; }
+
+  /* View head */
+  .view-head{ margin-bottom: 20px; }
+  .view-head h2{ font-size: 22px; }
+
+  /* Venta form */
+  .venta-form{
+    grid-template-columns: 1fr 1fr;
+  }
   .venta-submit{ grid-column: 1 / -1; }
 }
 
-@media (max-width: 860px){
-  .sidebar{
-    position: fixed;
-    left:0; top:0;
-    transform: translateX(-100%);
-    z-index: 50;
-    transition: transform .25s ease;
-    box-shadow: 0 0 40px rgba(0,0,0,.4);
+/* ============================================================
+   RESPONSIVE — 600px: móvil
+   ============================================================ */
+@media (max-width: 600px){
+  /* Auth */
+  .auth-screen{ padding: 16px; }
+  .auth-card{
+    padding: 28px 20px 24px;
+    border-radius: 16px;
   }
-  .sidebar.is-open{ transform: translateX(0); }
-  .topbar{ display:flex; }
-  .main{ padding: 22px 18px 50px; }
-  .kpi-grid, .kpi-grid-3{ grid-template-columns: 1fr 1fr; }
-  .view-head{ margin-bottom: 20px; }
-  .view-head h2{ font-size:22px; }
-}
+  .auth-brand h1{ font-size: 22px; }
+  .auth-tabs{ margin-bottom: 18px; }
+  .auth-tab{ font-size: 12px; padding: 8px 10px; }
 
-@media (max-width: 560px){
-  .kpi-grid, .kpi-grid-3{ grid-template-columns: 1fr; }
-  .panel{ padding: 16px; }
-  .panel-head{ flex-direction:column; align-items:flex-start; }
-  .search-box{ width:100%; min-width:0; }
-  .venta-form{ grid-template-columns: 1fr; }
-  .auth-card{ padding: 30px 22px; }
-  .data-table{ font-size:12.5px; }
-  .data-table th, .data-table td{ padding: 9px 8px; }
+  /* Layout */
+  .main{ padding: 16px 14px 60px; }
+
+  /* View head — apila texto y botón */
+  .view-head{
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    gap: 14px;
+  }
+  .view-head h2{ font-size: 20px; }
+  /* Botón de acción en view-head ocupa ancho completo en móvil */
+  .view-head > .btn{ width: 100%; justify-content: center; }
+
+  .eyebrow{ font-size: 11px; }
+  .header-date{ font-size: 12px; padding: 6px 12px; align-self: flex-start; }
+
+  /* KPI: una columna */
+  .kpi-grid, .kpi-grid-3{
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .kpi-card{ padding: 16px 14px; gap: 4px; }
+  .kpi-label{ font-size: 11.5px; }
+  .kpi-value{ font-size: 22px; }
+  .kpi-value-text{ font-size: 16px; }
+  .kpi-sub{ font-size: 11px; }
+
+  /* Panels */
+  .panel{
+    padding: 14px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  .panel-head{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .panel-head h3{ font-size: 15px; }
+
+  /* Search */
+  .search-box{
+    width: 100%;
+    min-width: 0;
+    padding: 7px 12px;
+  }
+  .search-box input{ font-size: 14px; }
+  .search-box svg{ width: 15px; height: 15px; }
+
+  /* Tablas: scroll horizontal suave */
+  .table-wrap{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .table-wrap-scroll{ max-height: 280px; }
+  .data-table{
+    font-size: 12.5px;
+    min-width: 380px;
+  }
+  .data-table th{
+    font-size: 10.5px;
+    padding: 8px 8px;
+    white-space: nowrap;
+  }
+  .data-table td{
+    padding: 9px 8px;
+  }
+
+  /* Ocultar columnas secundarias en tablas de gastos/ventas en móvil */
+  #gastos-table th:first-child,
+  #gastos-table td:first-child{ display: none; }   /* ID */
+  #ventas-table th:first-child,
+  #ventas-table td:first-child{ display: none; }   /* ID */
+
+  /* Row actions */
+  .row-actions{ gap: 4px; }
+  .row-btn{ width: 28px; height: 28px; }
+  .row-btn svg{ width: 13px; height: 13px; }
+
+  /* Panel Grid */
+  .panel-grid{
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* Panel Total */
+  .panel-total{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    font-size: 13px;
+  }
+  .panel-total strong{ font-size: 18px; }
+
+  /* Formulario de venta: una columna */
+  .venta-form{
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .venta-submit{
+    grid-column: 1 / -1;
+    height: 44px;
+  }
+
+  /* Campos de formulario: font-size 16px evita zoom en iOS */
+  .field{ gap: 5px; }
+  .field span{ font-size: 12px; }
+  .field input, .field select{
+    padding: 10px 12px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+
+  /* Modales */
+  .modal-backdrop{ padding: 12px; align-items: flex-end; }
+  .modal{
+    max-width: 100%;
+    width: 100%;
+    padding: 20px;
+    border-radius: 18px 18px 10px 10px;
+  }
+  .modal-sm{ max-width: 100%; }
+  .modal-head h3{ font-size: 16px; }
+  .modal-form{ gap: 12px; }
+  .modal-actions{
+    flex-direction: column-reverse;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .modal-actions .btn{ width: 100%; }
+
+  /* Botones: SOLO los de acción en modal/footer son full-width.
+     Los de view-head ya tienen su propia regla arriba.
+     NO hacemos todos los btn ancho 100% para evitar romper botones de tabla. */
+  .btn{ font-size: 13.5px; }
+
+  /* Empty state */
+  .empty-state{
+    padding: 24px 10px;
+    font-size: 12.5px;
+  }
+
+  /* Toast */
+  .toast{
+    bottom: 14px;
+    max-width: calc(100vw - 20px);
+    font-size: 13px;
+    padding: 12px 16px;
+  }
+
+  /* Topbar */
+  .topbar-title{ font-size: 15px; }
 }

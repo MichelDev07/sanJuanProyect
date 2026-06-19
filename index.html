@@ -120,6 +120,9 @@
     </div>
   </aside>
 
+  <!-- Sidebar overlay (móvil) -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
   <!-- Topbar móvil -->
   <header class="topbar">
     <button class="icon-btn" id="menu-toggle" aria-label="Abrir menú">
@@ -413,5 +416,35 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase.js"></script>
 <script src="js/app.js"></script>
+
+<script>
+/* ── Sidebar móvil: overlay + cierre ── */
+(function(){
+  const sidebar  = document.querySelector('.sidebar');
+  const overlay  = document.getElementById('sidebar-overlay');
+  const menuBtn  = document.getElementById('menu-toggle');
+
+  function openSidebar(){
+    sidebar.classList.add('is-open');
+    overlay.classList.add('is-visible');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar(){
+    sidebar.classList.remove('is-open');
+    overlay.classList.remove('is-visible');
+    document.body.style.overflow = '';
+  }
+
+  if(menuBtn) menuBtn.addEventListener('click', openSidebar);
+  if(overlay) overlay.addEventListener('click', closeSidebar);
+
+  /* Cerrar también al hacer click en un ítem del nav (móvil) */
+  document.querySelectorAll('.nav-item').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if(window.innerWidth <= 860) closeSidebar();
+    });
+  });
+})();
+</script>
 </body>
 </html>
