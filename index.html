@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>San Juan · Control Financiero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,400..700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ======================= PANTALLA DE AUTENTICACIÓN ======================= -->
+<section id="auth-screen" class="auth-screen">
+  <div class="ember" style="--x:10%; --d:0s"></div>
+  <div class="ember" style="--x:30%; --d:1.3s"></div>
+  <div class="ember" style="--x:55%; --d:0.6s"></div>
+  <div class="ember" style="--x:75%; --d:2s"></div>
+  <div class="ember" style="--x:90%; --d:0.9s"></div>
+
+  <div class="auth-card">
+    <div class="auth-brand">
+      <span class="flame-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C12 2 6 8.5 6 13.5C6 17.6 8.7 21 12 21C15.3 21 18 17.6 18 13.5C18 11.8 17.3 10.2 16.5 9C16.5 11 15.3 12.3 14.3 12.3C13.5 12.3 13.2 11.7 13.2 11C13.2 9.5 14.2 8.3 14.2 6.5C14.2 4.3 12 2 12 2Z" fill="currentColor"/></svg>
+      </span>
+      <h1>Noche de San Juan</h1>
+      <p class="auth-sub">Control financiero del evento &mdash; Gs.</p>
+    </div>
+
+    <div class="auth-tabs" role="tablist">
+      <button class="auth-tab is-active" data-tab="login" role="tab" aria-selected="true">Iniciar sesión</button>
+      <button class="auth-tab" data-tab="signup" role="tab" aria-selected="false">Crear cuenta</button>
+    </div>
+
+    <form id="login-form" class="auth-form" autocomplete="on">
+      <label class="field">
+        <span>Correo electrónico</span>
+        <input type="email" name="email" placeholder="tu@correo.com" required autocomplete="email">
+      </label>
+      <label class="field">
+        <span>Contraseña</span>
+        <input type="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+      </label>
+      <button type="submit" class="btn btn-primary btn-block">
+        <span class="btn-text">Entrar</span>
+      </button>
+      <p class="auth-msg" id="login-msg" role="status"></p>
+    </form>
+
+    <form id="signup-form" class="auth-form is-hidden" autocomplete="on">
+      <label class="field">
+        <span>Nombre completo</span>
+        <input type="text" name="fullname" placeholder="Tu nombre" required autocomplete="name">
+      </label>
+      <label class="field">
+        <span>Correo electrónico</span>
+        <input type="email" name="email" placeholder="tu@correo.com" required autocomplete="email">
+      </label>
+      <label class="field">
+        <span>Contraseña</span>
+        <input type="password" name="password" placeholder="Mínimo 6 caracteres" required minlength="6" autocomplete="new-password">
+      </label>
+      <button type="submit" class="btn btn-primary btn-block">
+        <span class="btn-text">Crear cuenta</span>
+      </button>
+      <p class="auth-msg" id="signup-msg" role="status"></p>
+    </form>
+
+    <p class="auth-foot">Encendiendo la fogata desde Paraguay 🔥</p>
+  </div>
+</section>
+
+<!-- ======================= APP PRINCIPAL ======================= -->
+<div id="app" class="app is-hidden">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span class="flame-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C12 2 6 8.5 6 13.5C6 17.6 8.7 21 12 21C15.3 21 18 17.6 18 13.5C18 11.8 17.3 10.2 16.5 9C16.5 11 15.3 12.3 14.3 12.3C13.5 12.3 13.2 11.7 13.2 11C13.2 9.5 14.2 8.3 14.2 6.5C14.2 4.3 12 2 12 2Z" fill="currentColor"/></svg>
+      </span>
+      <div>
+        <strong>San Juan</strong>
+        <small>Control Financiero</small>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item is-active" data-view="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-view="gastos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12c0-1 1-1.5 1-3s-1-2-1-3 1.5-2 3-2 2 1 3 1 1.5-1 3-1 3 1 3 2-1 2-1 3 1 2 1 3-1.5 2-3 2-2-1-3-1-1.5 1-3 1-3-1-3-2Z"/><path d="M3 12v6c0 1 1.5 2 3 2s2-1 3-1 1.5 1 3 1 3-1 3-2-1-1-1-2"/></svg>
+        <span>Gastos</span>
+      </button>
+      <button class="nav-item" data-view="ventas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h2l1.2 11.4A2 2 0 0 0 9.2 17H17a2 2 0 0 0 2-1.6L20.4 8H6"/><circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>
+        <span>Ventas</span>
+      </button>
+      <button class="nav-item" data-view="reportes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3h9l5 5v13H5z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+        <span>Reportes</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="user-chip">
+        <span class="user-avatar" id="user-avatar">U</span>
+        <div class="user-meta">
+          <strong id="user-name">Usuario</strong>
+          <small id="user-email">correo@evento.com</small>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-block" id="logout-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- Topbar móvil -->
+  <header class="topbar">
+    <button class="icon-btn" id="menu-toggle" aria-label="Abrir menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <span class="topbar-title" id="topbar-title">Dashboard</span>
+    <span class="user-avatar user-avatar-sm" id="user-avatar-sm">U</span>
+  </header>
+
+  <main class="main">
+
+    <!-- ---------- DASHBOARD ---------- -->
+    <section class="view is-active" id="view-dashboard">
+      <header class="view-head">
+        <div>
+          <p class="eyebrow">Resumen del evento</p>
+          <h2>Buenas, <span id="dash-username">amigo/a</span> 👋</h2>
+        </div>
+        <div class="header-date" id="header-date"></div>
+      </header>
+
+      <div class="kpi-grid">
+        <article class="kpi-card kpi-ventas">
+          <span class="kpi-label">Total ventas</span>
+          <strong class="kpi-value" id="kpi-ventas">Gs. 0</strong>
+          <span class="kpi-sub" id="kpi-ventas-count">0 ventas registradas</span>
+        </article>
+        <article class="kpi-card kpi-gastos">
+          <span class="kpi-label">Total gastos</span>
+          <strong class="kpi-value" id="kpi-gastos">Gs. 0</strong>
+          <span class="kpi-sub" id="kpi-gastos-count">0 gastos registrados</span>
+        </article>
+        <article class="kpi-card kpi-ganancia">
+          <span class="kpi-label">Ganancia neta</span>
+          <strong class="kpi-value" id="kpi-ganancia">Gs. 0</strong>
+          <span class="kpi-sub">Ventas − Gastos</span>
+        </article>
+        <article class="kpi-card kpi-usuario">
+          <span class="kpi-label">Conectado como</span>
+          <strong class="kpi-value kpi-value-text" id="kpi-usuario">—</strong>
+          <span class="kpi-sub">Sesión activa en Supabase</span>
+        </article>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Últimos movimientos</h3>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="dash-recent-table">
+            <thead>
+              <tr><th>Fecha</th><th>Tipo</th><th>Detalle</th><th>Usuario</th><th class="num">Monto</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p class="empty-state is-hidden" id="dash-empty">Todavía no hay movimientos. Registrá el primer gasto o venta para empezar 🔥</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- GASTOS ---------- -->
+    <section class="view" id="view-gastos">
+      <header class="view-head">
+        <div>
+          <p class="eyebrow">Salidas de dinero</p>
+          <h2>Gastos del evento</h2>
+        </div>
+        <button class="btn btn-primary" id="open-gasto-modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg>
+          Nuevo gasto
+        </button>
+      </header>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Listado de gastos</h3>
+          <label class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input type="search" id="gastos-search" placeholder="Buscar por concepto o usuario…">
+          </label>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="gastos-table">
+            <thead>
+              <tr><th>ID</th><th>Fecha</th><th>Concepto</th><th class="num">Monto</th><th>Usuario</th><th class="actions-col">Acciones</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p class="empty-state is-hidden" id="gastos-empty">No se encontraron gastos. Probá con otro término o agregá uno nuevo.</p>
+        </div>
+        <div class="panel-total">
+          <span>TOTAL GASTOS:</span>
+          <strong id="total-gastos">Gs. 0</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- VENTAS ---------- -->
+    <section class="view" id="view-ventas">
+      <header class="view-head">
+        <div>
+          <p class="eyebrow">Entradas de dinero</p>
+          <h2>Ventas del evento</h2>
+        </div>
+      </header>
+
+      <div class="panel panel-form">
+        <div class="panel-head"><h3>Registrar venta</h3></div>
+        <form id="venta-form" class="venta-form">
+          <label class="field">
+            <span>Producto</span>
+            <select id="venta-producto" required>
+              <option value="" disabled selected>Elegí un producto…</option>
+            </select>
+          </label>
+          <label class="field field-sm">
+            <span>Cantidad</span>
+            <input type="number" id="venta-cantidad" min="1" step="1" value="1" required>
+          </label>
+          <label class="field field-sm">
+            <span>Precio unitario</span>
+            <input type="text" id="venta-precio" readonly placeholder="Gs. 0">
+          </label>
+          <label class="field field-sm">
+            <span>Total</span>
+            <input type="text" id="venta-total" readonly placeholder="Gs. 0">
+          </label>
+          <button type="submit" class="btn btn-primary venta-submit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg>
+            Registrar venta
+          </button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Listado de ventas</h3>
+          <label class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input type="search" id="ventas-search" placeholder="Buscar por producto o usuario…">
+          </label>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="ventas-table">
+            <thead>
+              <tr><th>ID</th><th>Fecha</th><th>Producto</th><th class="num">Cant.</th><th class="num">Precio</th><th class="num">Total</th><th>Usuario</th><th class="actions-col">Acciones</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p class="empty-state is-hidden" id="ventas-empty">No se encontraron ventas. Probá con otro término o registrá una nueva.</p>
+        </div>
+        <div class="panel-total panel-total-ventas">
+          <span>TOTAL VENTAS:</span>
+          <strong id="total-ventas">Gs. 0</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- REPORTES ---------- -->
+    <section class="view" id="view-reportes">
+      <header class="view-head">
+        <div>
+          <p class="eyebrow">Cierre de cuentas</p>
+          <h2>Reporte general</h2>
+        </div>
+        <button class="btn btn-primary" id="export-txt-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          Exportar TXT
+        </button>
+      </header>
+
+      <div class="kpi-grid kpi-grid-3">
+        <article class="kpi-card kpi-gastos">
+          <span class="kpi-label">Total gastos</span>
+          <strong class="kpi-value" id="rep-gastos">Gs. 0</strong>
+        </article>
+        <article class="kpi-card kpi-ventas">
+          <span class="kpi-label">Total ventas</span>
+          <strong class="kpi-value" id="rep-ventas">Gs. 0</strong>
+        </article>
+        <article class="kpi-card kpi-ganancia">
+          <span class="kpi-label">Ganancia neta</span>
+          <strong class="kpi-value" id="rep-ganancia">Gs. 0</strong>
+        </article>
+      </div>
+
+      <div class="panel-grid">
+        <div class="panel">
+          <div class="panel-head"><h3>Detalle de gastos</h3></div>
+          <div class="table-wrap table-wrap-scroll">
+            <table class="data-table" id="rep-gastos-table">
+              <thead><tr><th>Fecha</th><th>Concepto</th><th class="num">Monto</th><th>Usuario</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Detalle de ventas</h3></div>
+          <div class="table-wrap table-wrap-scroll">
+            <table class="data-table" id="rep-ventas-table">
+              <thead><tr><th>Fecha</th><th>Producto</th><th class="num">Total</th><th>Usuario</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ======================= MODAL GASTO ======================= -->
+<div class="modal-backdrop is-hidden" id="gasto-modal-backdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="gasto-modal-title">Nuevo gasto</h3>
+      <button class="icon-btn" id="close-gasto-modal" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form id="gasto-form" class="modal-form">
+      <input type="hidden" id="gasto-id">
+      <label class="field">
+        <span>Concepto</span>
+        <input type="text" id="gasto-concepto" placeholder="Ej: Leña para el fogón" required>
+      </label>
+      <label class="field">
+        <span>Monto (Gs.)</span>
+        <input type="number" id="gasto-monto" min="1" step="1" placeholder="Ej: 150000" required>
+      </label>
+      <label class="field">
+        <span>Fecha</span>
+        <input type="date" id="gasto-fecha" required>
+      </label>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancel-gasto">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="save-gasto-btn">Guardar gasto</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ======================= MODAL EDITAR VENTA ======================= -->
+<div class="modal-backdrop is-hidden" id="venta-modal-backdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Editar venta</h3>
+      <button class="icon-btn" id="close-venta-modal" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form id="venta-edit-form" class="modal-form">
+      <input type="hidden" id="venta-edit-id">
+      <label class="field">
+        <span>Producto</span>
+        <select id="venta-edit-producto" required></select>
+      </label>
+      <label class="field">
+        <span>Cantidad</span>
+        <input type="number" id="venta-edit-cantidad" min="1" step="1" required>
+      </label>
+      <label class="field">
+        <span>Fecha</span>
+        <input type="date" id="venta-edit-fecha" required>
+      </label>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancel-venta-edit">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ======================= CONFIRMACIÓN ELIMINAR ======================= -->
+<div class="modal-backdrop is-hidden" id="confirm-modal-backdrop">
+  <div class="modal modal-sm">
+    <div class="modal-head">
+      <h3>¿Eliminar registro?</h3>
+    </div>
+    <p class="confirm-text" id="confirm-text">Esta acción no se puede deshacer.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" id="confirm-cancel">Cancelar</button>
+      <button type="button" class="btn btn-danger" id="confirm-accept">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

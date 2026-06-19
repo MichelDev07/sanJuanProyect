@@ -1,0 +1,17 @@
+{
+  "name": "san-juan-control-financiero",
+  "version": "1.0.0",
+  "description": "Control financiero del evento Noche de San Juan",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "dev": "http-server -p 5500 -c-1",
+    "build": "echo 'No build needed for static site'"
+  },
+  "keywords": ["san juan", "control financiero", "supabase"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
