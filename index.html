@@ -103,6 +103,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3h9l5 5v13H5z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
         <span>Reportes</span>
       </button>
+      <button class="nav-item" data-view="calculadora">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h1M14 11h1M9 15h1M14 15h1"/></svg>
+        <span>Calculadora</span>
+      </button>
     </nav>
 
     <div class="sidebar-foot">
@@ -331,6 +335,43 @@
       </div>
     </section>
 
+    <section class="view" id="view-calculadora">
+      <header class="view-head">
+        <div>
+          <p class="eyebrow">Herramienta rápida</p>
+          <h2>Calculadora</h2>
+        </div>
+      </header>
+      <div class="panel panel-form">
+        <div class="calculator" role="application" aria-label="Calculadora">
+          <div class="calculator-screen">
+            <input id="calc-screen" type="text" readonly value="0" aria-label="Pantalla de calculadora">
+          </div>
+          <div class="calculator-grid">
+            <button type="button" class="calc-button calc-action" data-action="clear">C</button>
+            <button type="button" class="calc-button calc-action" data-action="delete">⌫</button>
+            <button type="button" class="calc-button calc-action" data-action="divide">÷</button>
+            <br>
+            <button type="button" class="calc-button" data-value="7">7</button>
+            <button type="button" class="calc-button" data-value="8">8</button>
+            <button type="button" class="calc-button" data-value="9">9</button>
+            <button type="button" class="calc-button calc-action" data-action="multiply">×</button>
+            <button type="button" class="calc-button" data-value="4">4</button>
+            <button type="button" class="calc-button" data-value="5">5</button>
+            <button type="button" class="calc-button" data-value="6">6</button>
+            <button type="button" class="calc-button calc-action" data-action="subtract">−</button>
+            <button type="button" class="calc-button" data-value="1">1</button>
+            <button type="button" class="calc-button" data-value="2">2</button>
+            <button type="button" class="calc-button" data-value="3">3</button>
+            <button type="button" class="calc-button calc-action" data-action="add">+</button>
+            <button type="button" class="calc-button calc-zero" data-value="0">0</button>
+            <button type="button" class="calc-button" data-value=".">.</button>
+            <button type="button" class="calc-button calc-equals" data-action="equals">=</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 </div>
 
@@ -350,7 +391,7 @@
         <input type="text" id="gasto-concepto" placeholder="Ej: Leña para el fogón" required>
       </label>
       <label class="field">
-        <span>Monto (Gs.)</span>
+        <span>Monto (Gs. sin puntos )</span>
         <input type="number" id="gasto-monto" min="1" step="1" placeholder="Ej: 150000" required>
       </label>
       <label class="field">

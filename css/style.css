@@ -535,6 +535,61 @@ input:focus-visible, select:focus-visible, button:focus-visible, .nav-item:focus
 .field-sm input{ text-align:right; }
 .venta-submit{ height: 44px; }
 
+.calculator{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.calculator-screen{
+  background: var(--noche);
+  border-radius: 18px;
+  padding: 22px 18px;
+  box-shadow: inset 0 1px 3px rgba(255,255,255,.08);
+}
+.calculator-screen input{
+  width:100%;
+  border:none;
+  background: transparent;
+  color: var(--papel);
+  font-size: 32px;
+  font-weight:700;
+  text-align:right;
+}
+.calculator-screen input:focus{ outline:none; }
+.calculator-grid{
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.calc-button{
+  border:none;
+  border-radius: 14px;
+  padding: 18px 16px;
+  font-size: 18px;
+  font-weight:700;
+  color: var(--noche);
+  background: var(--papel-2);
+  cursor:pointer;
+  transition: transform .12s ease, background .15s;
+}
+.calc-button:hover{ background: #f4e8d8; }
+.calc-button:active{ transform: translateY(1px); }
+.calc-action{
+  background: rgba(196,30,42,.12);
+  color: var(--brasa);
+}
+.calc-action:hover{ background: rgba(196,30,42,.18); }
+.calc-equals{
+  grid-column: 4 / 5;
+  background: linear-gradient(160deg, var(--brasa), var(--brasa-honda));
+  color:#fff;
+}
+.calc-zero{
+  grid-column: 1 / 3;
+}
+
 /* ============================================================
    MODALES
    ============================================================ */

@@ -228,7 +228,111 @@ const titulos = {
   gastos: "Gastos",
   ventas: "Ventas",
   reportes: "Reportes",
+  calculadora: "Calculadora",
 };
+
+let calcExpression = "";
+
+function updateCalculatorScreen() {
+  const screen = document.getElementById("calc-screen");
+  if (screen) {
+    screen.value = calcExpression ? formatExpressionDisplay(calcExpression) : "0";
+  }
+}
+
+function formatExpressionDisplay(expr) {
+  return expr.split(/([+\-×÷])/g).map((segment) => {
+    if (segment === "" || /[+\-×÷]/.test(segment)) return segment;
+    return formatCalculatorNumber(segment);
+  }).join("");
+}
+
+function formatCalculatorNumber(numberStr) {
+  if (!numberStr) return "";
+  const negative = numberStr.startsWith("-");
+  if (negative) numberStr = numberStr.slice(1);
+  const [integerPart, decimalPart] = numberStr.split(".");
+  const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  const formatted = decimalPart !== undefined ? `${formattedInteger},${decimalPart}` : formattedInteger;
+  return negative ? `-${formatted}` : formatted;
+}
+
+function appendCalculatorValue(value) {
+  if (typeof value !== "string") return;
+  if (value === "." && calcExpression.slice(-1) === ".") return;
+  if (/^[+\-×÷*\/]/.test(value) && calcExpression === "") return;
+  if (/^[+\-×÷*\/]/.test(value) && /[+\-×÷*\/]$/.test(calcExpression)) {
+    calcExpression = calcExpression.slice(0, -1) + value;
+  } else {
+    calcExpression += value;
+  }
+  updateCalculatorScreen();
+}
+
+function clearCalculator() {
+  calcExpression = "";
+  updateCalculatorScreen();
+}
+
+function deleteCalculatorChar() {
+  calcExpression = calcExpression.slice(0, -1);
+  updateCalculatorScreen();
+}
+
+function evaluateCalculator() {
+  if (!calcExpression) return;
+  const safeExpression = calcExpression.replace(/×/g, "*").replace(/÷/g, "/");
+  try {
+    const result = Function('"use strict"; return (' + safeExpression + ')')();
+    calcExpression = String(Number(result.toFixed(12))).replace(/\.0+$/, "");
+    updateCalculatorScreen();
+  } catch {
+    const screen = document.getElementById("calc-screen");
+    if (screen) {
+      screen.value = "Error";
+    }
+    calcExpression = "";
+  }
+}
+
+document.addEventListener("click", (event) => {
+  const btn = event.target.closest(".calc-button");
+  if (!btn) return;
+  const action = btn.dataset.action;
+  const value = btn.dataset.value;
+
+  if (action === "clear") {
+    clearCalculator();
+    return;
+  }
+  if (action === "delete") {
+    deleteCalculatorChar();
+    return;
+  }
+  if (action === "equals") {
+    evaluateCalculator();
+    return;
+  }
+  if (action === "divide") {
+    appendCalculatorValue("÷");
+    return;
+  }
+  if (action === "multiply") {
+    appendCalculatorValue("×");
+    return;
+  }
+  if (action === "subtract") {
+    appendCalculatorValue("-");
+    return;
+  }
+  if (action === "add") {
+    appendCalculatorValue("+");
+    return;
+  }
+  if (value) {
+    appendCalculatorValue(value);
+  }
+});
 
 document.querySelectorAll(".nav-item").forEach((btn) => {
   btn.addEventListener("click", () => {
